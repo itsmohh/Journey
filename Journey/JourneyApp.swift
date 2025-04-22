@@ -6,12 +6,27 @@
 //
 
 import SwiftUI
+import FirebaseCore
 
 @main
 struct JourneyApp: App {
+    @StateObject private var viewModel = UserViewModel()
+    
+    init() {
+        FirebaseApp.configure()
+    }
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if viewModel.currentUser != nil {
+                NavigationView {
+                    MainTabView()
+                }
+                .environmentObject(viewModel)
+            } else {
+                AuthenticationView()
+                    .environmentObject(viewModel)
+            }
         }
     }
 }
